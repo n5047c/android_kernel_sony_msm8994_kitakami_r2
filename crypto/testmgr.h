@@ -26183,7 +26183,7 @@ static struct comp_testvec deflate_decomp_tv_template[] = {
 #define ZLIB_COMP_TEST_VECTORS 2
 #define ZLIB_DECOMP_TEST_VECTORS 2
 
-static const struct {
+static struct {
 	struct nlattr nla;
 	int val;
 } deflate_comp_params[] = {
@@ -26220,7 +26220,7 @@ static const struct {
 	}
 };
 
-static const struct {
+static struct {
 	struct nlattr nla;
 	int val;
 } deflate_decomp_params[] = {
