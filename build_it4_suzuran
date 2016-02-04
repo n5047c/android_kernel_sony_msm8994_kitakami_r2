@@ -5,11 +5,12 @@ rm ./arch/arm/boot/dts/*.dtb
 fi
 
 export ARCH=arm64
-export PATH=~/aarch64-linux-android-4.9-kernel/bin/:$PATH
-export CROSS_COMPILE=aarch64-linux-android-
+#export PATH=~/aarch64-linux-android-4.9-kernel/bin/:$PATH
+#export PATH=/home/sla/Android/CM-12.1/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/bin/:$PATH
+#export CROSS_COMPILE=aarch64-linux-android-
 export KBUILD_DIFFCONFIG=suzuran_diffconfig
-make kitakami_defconfig
-make
+#make kitakami_defconfig
+make -j5
 
 echo "checking for compiled kernel..."
 if [ -f arch/arm64/boot/Image ]
@@ -20,7 +21,7 @@ make dtbs
 ../final_files/dtbToolCM --force-v2 -o ../final_files/dt.img -s 2048 -p ./scripts/dtc/ ./arch/arm/boot/dts/
 
 ### copy zImage
-#cp arch/arm64/boot/Image ../final_files/. 
+#cp arch/arm64/boot/Image ../final_files/
 
 echo "DONE"
 
@@ -40,10 +41,10 @@ zip Z5C_AndroPlusKernel_v.zip boot.img
 rm -f boot.img
 
 ### Version number
-echo -n "Enter version number: "
-read version
+#echo -n "Enter version number: "
+#read version
 
 ### Copy zip to my desktop
-dd if=Z5C_AndroPlusKernel_v.zip of="/mnt/hgfs/VMShare/デスクトップ/Z5C_AndroPlusKernel_v$version.zip"
+#dd if=Z5C_AndroPlusKernel_v.zip of="/mnt/hgfs/VMShare/デスクトップ/Z5C_AndroPlusKernel_v$version.zip"
 
 fi
