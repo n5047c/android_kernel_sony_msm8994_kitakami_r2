@@ -37,7 +37,7 @@ then
 ### Zip boot.img
 cd ../final_files/
 mv boot_E5823.img boot.img
-zip Z5C_AndroPlusKernel_v.zip boot.img
+zip -r Z5C_SFclubKernel_v.zip META-INF boot.img
 rm -f boot.img
 
 ### Version number
