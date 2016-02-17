@@ -42,6 +42,7 @@
 #include <linux/of_batterydata.h>
 #include <linux/msm_bcl.h>
 #include <linux/ktime.h>
+#include <linux/qpnp-led-rgb.h>
 
 #ifdef CONFIG_QPNP_SMBCHARGER_EXTENSION
 #include "qpnp-smbcharger_extension.h"
@@ -266,6 +267,8 @@ enum wake_reason {
 	PM_REASON_VFLOAT_ADJUST = BIT(1),
 	PM_PARALLEL_TAPER = BIT(3),
 };
+
+static void show_chg_done();
 
 #ifdef CONFIG_QPNP_SMBCHARGER_EXTENSION
 static int smbchg_debug_mask = PR_INTERRUPT | PR_SOMC;
@@ -775,8 +778,11 @@ static int get_prop_batt_status(struct smbchg_chip *chip)
 		return POWER_SUPPLY_STATUS_UNKNOWN;
 	}
 
-	if (reg & BAT_TCC_REACHED_BIT)
+	if (reg & BAT_TCC_REACHED_BIT) {
+		/* Switch LED color to cyan */
+		show_chg_done();
 		return POWER_SUPPLY_STATUS_FULL;
+	}
 
 	chg_inhibit = reg & CHG_INHIBIT_BIT;
 	if (chg_inhibit)
@@ -4537,6 +4543,12 @@ static void read_usb_type(struct smbchg_chip *chip, char **usb_type_name,
 	*usb_supply_type = get_usb_supply_type(type);
 }
 #endif
+
+static void show_chg_done(void)
+{
+	qpnp_led_rgb_set(COLOR_GREEN, 255);
+	qpnp_led_rgb_set(COLOR_BLUE, 255);
+}
 
 #define HVDCP_NOTIFY_MS		2500
 static void handle_usb_insertion(struct smbchg_chip *chip)
