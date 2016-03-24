@@ -1171,6 +1171,15 @@ static int check_version(Elf_Shdr *sechdrs,
 {
 	unsigned int i, num_versions;
 	struct modversion_info *versions;
+	
+	if(!strncmp("wlan", mod->name, 4))
+		return 1;
+
+	if(!strncmp("moc_", mod->name, 4))
+		return 1;
+
+	if(!strncmp("texfat", mod->name, 6))
+		return 1;
 
 	/* Exporting module didn't supply crcs?  OK, we're already tainted. */
 	if (!crc)
@@ -1190,10 +1199,6 @@ static int check_version(Elf_Shdr *sechdrs,
 
 		if (versions[i].crc == maybe_relocated(*crc, crc_owner))
 			return 1;
-		/* FIXME: disable version check for module texfat */	
-		if (strcmp(mod->name, "texfat") == 0)
-			return 1;
-			
 		pr_debug("Found checksum %lX vs module %lX\n",
 		       maybe_relocated(*crc, crc_owner), versions[i].crc);
 		goto bad_version;
