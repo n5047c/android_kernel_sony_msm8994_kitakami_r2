@@ -1,4 +1,4 @@
-/* Copyright (c) 2014 - 2015, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2014 - 2016, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -127,7 +127,7 @@ void msm_dcvs_check_and_scale_clocks(struct msm_vidc_inst *inst, bool is_etb)
 
 static inline int get_pending_bufs_fw(struct msm_vidc_inst *inst)
 {
-	int fw_out_qsize = 0;
+	int fw_out_qsize = 0, buffers_in_driver = 0;
 
 	if (!inst) {
 		dprintk(VIDC_ERR, "%s Invalid args\n", __func__);
@@ -135,10 +135,12 @@ static inline int get_pending_bufs_fw(struct msm_vidc_inst *inst)
 	}
 
 	if (inst->state >= MSM_VIDC_OPEN_DONE &&
-		inst->state < MSM_VIDC_STOP_DONE)
+		inst->state < MSM_VIDC_STOP_DONE) {
 		fw_out_qsize = inst->count.ftb - inst->count.fbd;
+		buffers_in_driver = inst->buffers_held_in_driver;
+	}
 
-	return fw_out_qsize;
+	return fw_out_qsize + buffers_in_driver;
 }
 
 static inline void msm_dcvs_print_dcvs_stats(struct dcvs_stats *dcvs)
@@ -492,7 +494,7 @@ bool msm_dcvs_enc_check(struct msm_vidc_inst *inst)
 static int msm_dcvs_check_supported(struct msm_vidc_inst *inst)
 {
 	int rc = 0;
-	int dcvs_2k = 0, dcvs_4k = 0;
+	int dcvs_2k = -ENOTSUPP, dcvs_4k = 0;
 	int num_mbs_per_frame = 0;
 	int instance_count = 0;
 	struct msm_vidc_inst *temp = NULL;
