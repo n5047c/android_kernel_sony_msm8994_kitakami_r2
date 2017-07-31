@@ -45,6 +45,7 @@
 #include <sound/q6audio-v2.h>
 #include <sound/audio_cal_utils.h>
 #include <sound/msm-dts-eagle.h>
+#include <sound/adsp_err.h>
 
 #include "sound/sony-hweffect.h"
 #include "sound/sony-hweffect-params.h"
