@@ -152,6 +152,8 @@ struct kgsl_memdesc {
 	unsigned int flags; /* Flags set from userspace */
 	struct device *dev;
 	struct dma_attrs attrs;
+	struct page **pages;
+	unsigned int page_count;
 };
 
 /*
